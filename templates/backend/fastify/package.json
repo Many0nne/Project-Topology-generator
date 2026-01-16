@@ -1,0 +1,13 @@
+{
+  "name": "__PROJECT_NAME__-backend-fastify",
+  "version": "1.0.0",
+  "description": "Minimal Fastify backend for __PROJECT_NAME__",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "fastify": "^4.22.0"
+  }
+}

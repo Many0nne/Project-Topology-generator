@@ -1,0 +1,17 @@
+{
+  "name": "topologie-projet",
+  "version": "1.0.0",
+  "description": "Simple CLI for testing npm link",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bin": { "create-my-app": "./index.js" },
+  "dependencies": {
+    "commander": "^10.0.0"
+  }
+}
