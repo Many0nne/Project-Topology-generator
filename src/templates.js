@@ -9,7 +9,13 @@ module.exports = {
   frontend: {
     'react-vite': [
       {
-        src: path.join(base, 'templates', 'frontend', 'react-vite', 'frontend-legacy'),
+        src: path.join(base, 'templates', 'frontend', 'react-vite'),
+        dest: ''
+      }
+    ],
+    'react-vite-auth': [
+      {
+        src: path.join(base, 'templates', 'frontend', 'react-vite-auth'),
         dest: ''
       }
     ]
@@ -17,7 +23,7 @@ module.exports = {
   fullstack: {
     'react-vite+express': [
       {
-        src: path.join(base, 'templates', 'frontend', 'react-vite', 'frontend-legacy'),
+        src: path.join(base, 'templates', 'frontend', 'react-vite'),
         dest: 'frontend'
       },
       {
@@ -27,11 +33,31 @@ module.exports = {
     ],
     'react-vite+fastify': [
       {
-        src: path.join(base, 'templates', 'frontend', 'react-vite', 'frontend-legacy'),
+        src: path.join(base, 'templates', 'frontend', 'react-vite'),
         dest: 'frontend'
       },
       {
         src: path.join(base, 'templates', 'backend', 'fastify'),
+        dest: 'backend'
+      }
+    ],
+    'react-vite-auth+express-auth': [
+      {
+        src: path.join(base, 'templates', 'frontend', 'react-vite-auth'),
+        dest: 'frontend'
+      },
+      {
+        src: path.join(base, 'templates', 'backend', 'express-auth'),
+        dest: 'backend'
+      }
+    ],
+    'react-vite-auth+fastify-auth': [
+      {
+        src: path.join(base, 'templates', 'frontend', 'react-vite-auth'),
+        dest: 'frontend'
+      },
+      {
+        src: path.join(base, 'templates', 'backend', 'fastify-auth'),
         dest: 'backend'
       }
     ]

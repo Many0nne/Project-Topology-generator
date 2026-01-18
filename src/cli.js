@@ -50,6 +50,10 @@ program
       let feChoice = 'react-vite';
       if (/1|react/i.test(feAns)) feChoice = 'react-vite';
 
+      const addAuthAns = await question('\nAjouter l\'auth ? (y/N) : ');
+      const withAuth = /^y(es)?$/i.test(addAuthAns.trim());
+      if (withAuth) feChoice = 'react-vite-auth';
+
       const items = templates.frontend[feChoice];
       const destRoot = process.cwd();
       try {
@@ -86,7 +90,12 @@ program
       let beChoice = 'express';
       if (beAns.trim() === '2' || /fastify/i.test(beAns)) beChoice = 'fastify';
 
-      const combinedKey = `${feChoice}+${beChoice}`;
+      const addAuthAns = await question('\nAjouter l\'auth ? (y/N) : ');
+      const withAuth = /^y(es)?$/i.test(addAuthAns.trim());
+      const feKey = withAuth ? `${feChoice}-auth` : feChoice;
+      const beKey = withAuth ? `${beChoice}-auth` : beChoice;
+
+      const combinedKey = `${feKey}+${beKey}`;
       const items = templates.fullstack[combinedKey];
       if (!items) {
         console.error('Combinaison non supportée :', combinedKey);
@@ -101,7 +110,7 @@ program
         const addDockerAns = await question('\nAjouter Docker pour le dev ? (y/N) : ');
         if (/^y(es)?$/i.test(addDockerAns.trim())) {
           try {
-            const moduleSrc = modules['docker-dev'].fullstack;
+            const moduleSrc = withAuth ? modules['docker-dev'].fullstackAuth : modules['docker-dev'].fullstack;
             await generator.installDockerModule({ moduleSrc, projectDest, variant: 'fullstack', force, projectName });
             console.log('Module Docker-dev (fullstack) installé dans le projet');
           } catch (err) {

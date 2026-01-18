@@ -6,6 +6,7 @@ const base = path.resolve(__dirname, '..');
 module.exports = {
   'docker-dev': {
     frontend: path.join(base, 'modules', 'docker-dev', 'docker-dev-frontend'),
-    fullstack: path.join(base, 'modules', 'docker-dev', 'docker-dev-fullstack')
+    fullstack: path.join(base, 'modules', 'docker-dev', 'docker-dev-fullstack'),
+    fullstackAuth: path.join(base, 'modules', 'docker-dev', 'docker-dev-fullstack-auth')
   }
 };
