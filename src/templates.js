@@ -31,16 +31,6 @@ module.exports = {
         dest: 'backend'
       }
     ],
-    'react-vite+fastify': [
-      {
-        src: path.join(base, 'templates', 'frontend', 'react-vite'),
-        dest: 'frontend'
-      },
-      {
-        src: path.join(base, 'templates', 'backend', 'fastify'),
-        dest: 'backend'
-      }
-    ],
     'react-vite-auth+express-auth': [
       {
         src: path.join(base, 'templates', 'frontend', 'react-vite-auth'),
@@ -51,15 +41,6 @@ module.exports = {
         dest: 'backend'
       }
     ],
-    'react-vite-auth+fastify-auth': [
-      {
-        src: path.join(base, 'templates', 'frontend', 'react-vite-auth'),
-        dest: 'frontend'
-      },
-      {
-        src: path.join(base, 'templates', 'backend', 'fastify-auth'),
-        dest: 'backend'
-      }
-    ]
+    
   }
 };

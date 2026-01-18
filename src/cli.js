@@ -85,10 +85,9 @@ program
 
       console.log('\nQuel backend ?');
       console.log('1) express');
-      console.log('2) fastify');
-      const beAns = await question('Choix (1/2) : ');
+      const beAns = await question('Choix (1) : ');
       let beChoice = 'express';
-      if (beAns.trim() === '2' || /fastify/i.test(beAns)) beChoice = 'fastify';
+      if (/1|express/i.test(beAns)) beChoice = 'express';
 
       const addAuthAns = await question('\nAjouter l\'auth ? (y/N) : ');
       const withAuth = /^y(es)?$/i.test(addAuthAns.trim());

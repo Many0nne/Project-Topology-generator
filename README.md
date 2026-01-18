@@ -3,7 +3,7 @@
 **Goal:** Save time bootstrapping projects and avoid redundant setup where teammates overwrite each other’s code. This generator scaffolds consistent frontends/backends, wires Docker dev environments, and bakes in authentication best practices.
 
 ## What It Does
-- **Scaffolds templates:** React/Vite frontends, Express or Fastify backends, with optional auth.
+- **Scaffolds templates:** React/Vite frontends, Express backend, with optional auth.
 - **Auth built-in:** JWT access + httpOnly refresh cookies, rotation with `tokenVersion`, secure defaults.
 - **Database ready:** Prisma ORM with Postgres, schema + client generation.
 - **Dev environment:** Docker Compose for fullstack auth setups (frontend + backend + Postgres).
@@ -17,8 +17,6 @@
 - Backend:
   - Express
   - Express (Auth)
-  - Fastify
-  - Fastify (Auth)
 - Docker modules:
   - Frontend dev (Vite)
   - Fullstack dev (backend + frontend)
@@ -74,7 +72,6 @@ npm run prisma:migrate:dev
 
 Backend implementations live under templates:
 - Express: [templates/backend/express-auth/src/routes/auth.js](templates/backend/express-auth/src/routes/auth.js)
-- Fastify: [templates/backend/fastify-auth/src/routes/auth.js](templates/backend/fastify-auth/src/routes/auth.js)
 
 ## Frameworks & Features Roadmap
 
@@ -82,7 +79,6 @@ Backend implementations live under templates:
 - [x] React + Vite
 - [ ] Vue.js + Vite (planned)
 - [x] Express backend
-- [x] Fastify backend
 - [ ] Python (FastAPI) backend (planned)
 - [ ] Python (Django) backend (planned)
 - [ ] NestJS backend (planned)
@@ -104,5 +100,4 @@ Backend implementations live under templates:
 - Validate with Docker Compose and run Prisma migrations for auth templates.
 
 ## Notes
-- With bind-mounted volumes, ensure Prisma client is generated at runtime (`postinstall` or startup) so it isn’t hidden by empty `node_modules`.
-- Fastify v5 requires compatible plugin majors (helmet, cookie, cors) — templates are aligned; if you change versions, update plugins accordingly.
+-- With bind-mounted volumes, ensure Prisma client is generated at runtime (`postinstall` or startup) so it isn’t hidden by empty `node_modules`.
