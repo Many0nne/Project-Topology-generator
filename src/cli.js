@@ -50,9 +50,7 @@ program
       let feChoice = 'react-vite';
       if (/1|react/i.test(feAns)) feChoice = 'react-vite';
 
-      const addAuthAns = await question('\nAjouter l\'auth ? (y/N) : ');
-      const withAuth = /^y(es)?$/i.test(addAuthAns.trim());
-      if (withAuth) feChoice = 'react-vite-auth';
+      // Frontend-only projects don't support auth (requires backend)
 
       const items = templates.frontend[feChoice];
       const destRoot = process.cwd();
@@ -109,7 +107,13 @@ program
         const addDockerAns = await question('\nAjouter Docker pour le dev ? (y/N) : ');
         if (/^y(es)?$/i.test(addDockerAns.trim())) {
           try {
-            const moduleSrc = withAuth ? modules['docker-dev'].fullstackAuth : modules['docker-dev'].fullstack;
+            let moduleSrc = withAuth ? modules['docker-dev'].fullstackAuth : modules['docker-dev'].fullstack;
+            if (withAuth) {
+              const addAdminAns = await question('\nAjouter le panneau admin (pgAdmin) ? (y/N) : ');
+              if (/^y(es)?$/i.test(addAdminAns.trim())) {
+                moduleSrc = modules['docker-dev'].fullstackAuthAdmin;
+              }
+            }
             await generator.installDockerModule({ moduleSrc, projectDest, variant: 'fullstack', force, projectName });
             console.log('Module Docker-dev (fullstack) installé dans le projet');
           } catch (err) {

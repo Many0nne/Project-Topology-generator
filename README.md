@@ -98,6 +98,7 @@ Backend implementations live under templates:
 - Keep changes minimal and focused; match template style.
 - Prefer fixing root causes (e.g., Prisma generation order with mounted volumes).
 - Validate with Docker Compose and run Prisma migrations for auth templates.
+- If you have advices on how to make this project better, i will gladly take it as i never did anything like it before
 
 ## Notes
 -- With bind-mounted volumes, ensure Prisma client is generated at runtime (`postinstall` or startup) so it isn’t hidden by empty `node_modules`.
