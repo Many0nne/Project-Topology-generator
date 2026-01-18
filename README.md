@@ -51,6 +51,12 @@ docker-compose up -d --build
 - Backend (auth variant): http://localhost:3001
 - Postgres (auth variant): localhost:5432
 
+Admin panel (pgAdmin) setup
+- Register a new server in pgAdmin.
+- For the Host name, use: `<your-app-name>-db-1` (for example `my-app-db-1`).
+- Enter the Postgres **username** and **password** from your Compose file (defaults: `postgres` / `postgres`).
+- Save — you should now be able to browse the database from pgAdmin (default UI at http://localhost:5050).
+
 5. Migrate the database (auth backends):
 
 ```bash

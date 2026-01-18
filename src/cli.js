@@ -50,8 +50,6 @@ program
       let feChoice = 'react-vite';
       if (/1|react/i.test(feAns)) feChoice = 'react-vite';
 
-      // Frontend-only projects don't support auth (requires backend)
-
       const items = templates.frontend[feChoice];
       const destRoot = process.cwd();
       try {
