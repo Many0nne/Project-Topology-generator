@@ -17,10 +17,37 @@ async function copyDir(src, dest) {
 
 async function replacePlaceholders(root, projectName) {
   const textExts = new Set([
-    '.js', '.ts', '.jsx', '.tsx', '.json', '.md', '.markdown', '.html', '.htm',
-    '.css', '.scss', '.less', '.txt', '.yml', '.yaml', '.xml', '.toml', '.ini', '.properties'
+    '.js',
+    '.ts',
+    '.jsx',
+    '.tsx',
+    '.json',
+    '.md',
+    '.markdown',
+    '.html',
+    '.htm',
+    '.css',
+    '.scss',
+    '.less',
+    '.txt',
+    '.yml',
+    '.yaml',
+    '.xml',
+    '.toml',
+    '.ini',
+    '.properties',
   ]);
-  const nameWhitelist = new Set(['Dockerfile', 'Makefile', '.gitignore', '.gitattributes', 'LICENSE', 'README', 'README.md', '.env', 'package.json']);
+  const nameWhitelist = new Set([
+    'Dockerfile',
+    'Makefile',
+    '.gitignore',
+    '.gitattributes',
+    'LICENSE',
+    'README',
+    'README.md',
+    '.env',
+    'package.json',
+  ]);
   const skipDirs = new Set(['node_modules', '.git', 'dist', 'build', '.next', '.venv']);
 
   const entries = await fs.promises.readdir(root, { withFileTypes: true });
@@ -54,7 +81,13 @@ async function replacePlaceholders(root, projectName) {
 
 // Generate from an explicit list of items: [{ src, dest }, ...]
 // dest is a relative folder inside the generated project. If dest === '' copy into project root.
-async function generateFromList({ items, projectName, destRoot, createRootPkg = false, force = false }) {
+async function generateFromList({
+  items,
+  projectName,
+  destRoot,
+  createRootPkg = false,
+  force = false,
+}) {
   const projectDest = path.join(destRoot, projectName || 'project');
 
   // If destination exists and is non-empty, refuse unless force=true
@@ -62,7 +95,9 @@ async function generateFromList({ items, projectName, destRoot, createRootPkg = 
   if (exists) {
     const notEmpty = !(await isDirEmpty(projectDest));
     if (notEmpty && !force) {
-      throw new Error(`Destination ${projectDest} existe et n'est pas vide. Utilisez --force pour écraser.`);
+      throw new Error(
+        `Destination ${projectDest} existe et n'est pas vide. Utilisez --force pour écraser.`,
+      );
     }
   } else {
     await fs.promises.mkdir(projectDest, { recursive: true });
@@ -75,7 +110,9 @@ async function generateFromList({ items, projectName, destRoot, createRootPkg = 
       const destPath = target ? path.join(projectDest, target) : projectDest;
       const conflicts = await findConflicts(item.src, destPath);
       if (conflicts.length > 0) {
-        throw new Error(`Conflit de fichiers détecté : ${conflicts[0]}. Utilisez --force pour écraser.`);
+        throw new Error(
+          `Conflit de fichiers détecté : ${conflicts[0]}. Utilisez --force pour écraser.`,
+        );
       }
     }
   }
@@ -89,14 +126,18 @@ async function generateFromList({ items, projectName, destRoot, createRootPkg = 
   }
 
   if (createRootPkg) {
-    const workspaceNames = items.map((it) => (it.dest || '').trim()).filter(Boolean);
+    const workspaceNames = items.map(it => (it.dest || '').trim()).filter(Boolean);
     const rootPkg = {
       name: '__PROJECT_NAME__',
       version: '1.0.0',
       private: true,
-      workspaces: workspaceNames
+      workspaces: workspaceNames,
     };
-    await fs.promises.writeFile(path.join(projectDest, 'package.json'), JSON.stringify(rootPkg, null, 2), 'utf8');
+    await fs.promises.writeFile(
+      path.join(projectDest, 'package.json'),
+      JSON.stringify(rootPkg, null, 2),
+      'utf8',
+    );
   }
 
   await replacePlaceholders(projectDest, projectName);
@@ -145,14 +186,22 @@ async function findConflicts(srcRoot, destRoot) {
 }
 
 // Install an optional module: copy moduleSrc into projectDest/<moduleFolderName>
-async function installModule({ moduleSrc, projectDest, moduleFolderName = 'docker-dev', force = false, projectName }) {
+async function installModule({
+  moduleSrc,
+  projectDest,
+  moduleFolderName = 'docker-dev',
+  force = false,
+  projectName,
+}) {
   const moduleDest = path.join(projectDest, moduleFolderName);
 
   const exists = await existsPath(moduleDest);
   if (exists) {
     const notEmpty = !(await isDirEmpty(moduleDest));
     if (notEmpty && !force) {
-      throw new Error(`Destination du module ${moduleDest} existe et n'est pas vide. Utilisez --force pour écraser.`);
+      throw new Error(
+        `Destination du module ${moduleDest} existe et n'est pas vide. Utilisez --force pour écraser.`,
+      );
     }
   } else {
     await fs.promises.mkdir(moduleDest, { recursive: true });
@@ -162,7 +211,9 @@ async function installModule({ moduleSrc, projectDest, moduleFolderName = 'docke
   if (!force) {
     const conflicts = await findConflicts(moduleSrc, moduleDest);
     if (conflicts.length > 0) {
-      throw new Error(`Conflit lors de l'installation du module : ${conflicts[0]}. Utilisez --force pour écraser.`);
+      throw new Error(
+        `Conflit lors de l'installation du module : ${conflicts[0]}. Utilisez --force pour écraser.`,
+      );
     }
   }
 
@@ -175,12 +226,12 @@ async function installModule({ moduleSrc, projectDest, moduleFolderName = 'docke
 // - docker-compose.yml -> project root
 // - frontend.Dockerfile -> frontend/Dockerfile or project root if frontend is at root
 // - backend.Dockerfile -> backend/Dockerfile
-async function installDockerModule({ moduleSrc, projectDest, variant = 'frontend', force = false, projectName }) {
+async function installDockerModule({ moduleSrc, projectDest, force = false, projectName }) {
   // locate files in moduleSrc
   const files = await fs.promises.readdir(moduleSrc, { withFileTypes: true });
   // helper to copy and replace
   async function copyAndReplace(srcFile, destPath) {
-    if (await existsPath(destPath) && !force) {
+    if ((await existsPath(destPath)) && !force) {
       throw new Error(`Fichier cible existe: ${destPath}. Utilisez --force pour écraser.`);
     }
     await fs.promises.mkdir(path.dirname(destPath), { recursive: true });
@@ -199,12 +250,17 @@ async function installDockerModule({ moduleSrc, projectDest, variant = 'frontend
       // determine frontend location: projectDest/frontend if exists, else projectDest
       const frontendDir = path.join(projectDest, 'frontend');
       const frontendExists = await existsPath(frontendDir);
-      const dest = frontendExists ? path.join(frontendDir, 'Dockerfile') : path.join(projectDest, 'Dockerfile');
+      const dest = frontendExists
+        ? path.join(frontendDir, 'Dockerfile')
+        : path.join(projectDest, 'Dockerfile');
       await copyAndReplace(srcPath, dest);
     } else if (/backend\.Dockerfile$/i.test(name)) {
       const backendDir = path.join(projectDest, 'backend');
       if (!(await existsPath(backendDir))) {
-        if (!force) throw new Error('Backend absent : impossible d\'installer backend Dockerfile sans --force');
+        if (!force)
+          throw new Error(
+            "Backend absent : impossible d'installer backend Dockerfile sans --force",
+          );
         await fs.promises.mkdir(backendDir, { recursive: true });
       }
       const dest = path.join(backendDir, 'Dockerfile');
@@ -222,9 +278,7 @@ module.exports = {
   // exported for use by CLI (checks for module copying)
   existsPath,
   isDirEmpty,
-  findConflicts
-  , installModule,
-  installDockerModule
+  findConflicts,
+  installModule,
+  installDockerModule,
 };
-
-

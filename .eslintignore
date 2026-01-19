@@ -1,0 +1,9 @@
+node_modules/
+dist/
+build/
+coverage/
+templates/**/node_modules/
+modules/**/node_modules/
+frontend/**/node_modules/
+.turbo/
+.next/

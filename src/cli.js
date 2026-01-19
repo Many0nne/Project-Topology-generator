@@ -4,7 +4,6 @@ const readline = require('readline');
 const templates = require('./templates');
 const modules = require('./modules');
 const generator = require('./generator');
-const path = require('path');
 
 const program = new Command();
 program.name('create-my-app').description('Simple CLI');
@@ -17,7 +16,7 @@ program
     console.log('CLI OK');
 
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-    const question = (q) => new Promise((resolve) => rl.question(q, (ans) => resolve(ans)));
+    const question = q => new Promise(resolve => rl.question(q, ans => resolve(ans)));
 
     const projectName = (await question('Nom du projet : ')).trim();
 
@@ -53,14 +52,26 @@ program
       const items = templates.frontend[feChoice];
       const destRoot = process.cwd();
       try {
-        const dest = await generator.generateFromList({ items, projectName, destRoot, createRootPkg: false, force });
+        const dest = await generator.generateFromList({
+          items,
+          projectName,
+          destRoot,
+          createRootPkg: false,
+          force,
+        });
         console.log('Le dossier template frontend a été copié dans', dest);
 
         const addDockerAns = await question('\nAjouter Docker pour le dev ? (y/N) : ');
         if (/^y(es)?$/i.test(addDockerAns.trim())) {
           try {
             const moduleSrc = modules['docker-dev'].frontend;
-            await generator.installDockerModule({ moduleSrc, projectDest: dest, variant: 'frontend', force, projectName });
+            await generator.installDockerModule({
+              moduleSrc,
+              projectDest: dest,
+              variant: 'frontend',
+              force,
+              projectName,
+            });
             console.log('Module Docker-dev (frontend) installé dans le projet');
           } catch (err) {
             console.error('Échec de copie du module Docker :', err.message);
@@ -85,7 +96,7 @@ program
       let beChoice = 'express';
       if (/1|express/i.test(beAns)) beChoice = 'express';
 
-      const addAuthAns = await question('\nAjouter l\'auth ? (y/N) : ');
+      const addAuthAns = await question("\nAjouter l'auth ? (y/N) : ");
       const withAuth = /^y(es)?$/i.test(addAuthAns.trim());
       const feKey = withAuth ? `${feChoice}-auth` : feChoice;
       const beKey = withAuth ? `${beChoice}-auth` : beChoice;
@@ -99,20 +110,34 @@ program
 
       const destRoot = process.cwd();
       try {
-        const projectDest = await generator.generateFromList({ items, projectName, destRoot, createRootPkg: true, force });
+        const projectDest = await generator.generateFromList({
+          items,
+          projectName,
+          destRoot,
+          createRootPkg: true,
+          force,
+        });
         console.log('Le monorepo (frontend + backend) a été copié dans', projectDest);
 
         const addDockerAns = await question('\nAjouter Docker pour le dev ? (y/N) : ');
         if (/^y(es)?$/i.test(addDockerAns.trim())) {
           try {
-            let moduleSrc = withAuth ? modules['docker-dev'].fullstackAuth : modules['docker-dev'].fullstack;
+            let moduleSrc = withAuth
+              ? modules['docker-dev'].fullstackAuth
+              : modules['docker-dev'].fullstack;
             if (withAuth) {
               const addAdminAns = await question('\nAjouter le panneau admin (pgAdmin) ? (y/N) : ');
               if (/^y(es)?$/i.test(addAdminAns.trim())) {
                 moduleSrc = modules['docker-dev'].fullstackAuthAdmin;
               }
             }
-            await generator.installDockerModule({ moduleSrc, projectDest, variant: 'fullstack', force, projectName });
+            await generator.installDockerModule({
+              moduleSrc,
+              projectDest,
+              variant: 'fullstack',
+              force,
+              projectName,
+            });
             console.log('Module Docker-dev (fullstack) installé dans le projet');
           } catch (err) {
             console.error('Échec de copie du module Docker :', err.message);
