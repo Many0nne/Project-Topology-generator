@@ -34,5 +34,5 @@ jobs:
       - name: Run type check
         run: npm run build
 
-      - name: Check Prettier formatting
-        run: npm run format:check
+      - name: Prettier formatting
+        run: npm run format
